@@ -91,8 +91,19 @@
 
     </div>
     <div class="title" :class="{hide_smooth: viewSection, blur: showMenu}" @click="hideMenu">
-      <vue-typer text='Hi, my name is Hanna.' :repeat='0' caret-animation='blink' :type-delay='90'></vue-typer>
-      <vue-typer class="jobs" text='Full stack developer / Front end developer / Web designer' :repeat='0' caret-animation='blink' :type-delay='70' :pre-type-delay='2300'></vue-typer>
+      <hide-at :breakpoints="{small: 620, medium: 1024, large: 1600}" breakpoint="mediumAndBelow">
+        <vue-typer :text='mainText' :repeat='0' caret-animation='blink' :type-delay='90'></vue-typer>
+      </hide-at>
+      <show-at :breakpoints="{small: 620, medium: 1024, large: 1600}" breakpoint="mediumAndBelow">
+        <vue-typer :text='mainTextMobile' :repeat='0' caret-animation='blink' :type-delay='90'></vue-typer>
+      </show-at>
+
+      <hide-at :breakpoints="{small: 620, medium: 1024, large: 1600}" breakpoint="mediumAndBelow">
+        <vue-typer class="jobs" :text='smallText' :repeat='0' caret-animation='blink' :type-delay='70' :pre-type-delay='2300'></vue-typer>
+      </hide-at>
+      <show-at :breakpoints="{small: 620, medium: 1024, large: 1600}" breakpoint="mediumAndBelow">
+        <vue-typer class="jobs" :text='smallTextMobile' :repeat='0' caret-animation='blink' :type-delay='70' :pre-type-delay='2300'></vue-typer>
+      </show-at>
 
     </div>
     <div v-if="currentPage !== 'home'" class="section_title">
@@ -116,6 +127,13 @@
         <div class="about_image">
           <div class="layer"></div>
           <img src="../assets/test2.jpg" alt="">
+        </div>
+      </div>
+
+      <div class="work_container" :class="{ hide: !(currentPage === 'work') }">
+
+        <div class="work_item" v-for="work in works" :key="work.name">
+
         </div>
       </div>
 
@@ -176,14 +194,15 @@
 </template>
 
 <script>
-import {
-  VueTyper
-} from 'vue-typer'
+import { VueTyper } from 'vue-typer'
+import { showAt, hideAt } from 'vue-breakpoints'
 
 export default {
   name: 'Hello',
   components: {
-    VueTyper
+    VueTyper,
+    showAt,
+    hideAt
   },
 
   data() {
@@ -192,7 +211,12 @@ export default {
       viewSection: false, // Toggle section
       back: false, // Back arrow animation
       contactForm: false, // Contact section
-      currentPage: 'home'
+      currentPage: 'home',
+      mainText: 'Hi, my name is Hanna.',
+      mainTextMobile:'Hi, my name\nis Hanna.',
+      smallText: 'Full stack developer / Front end developer / Web designer',
+      smallTextMobile: 'Full stack developer / Front end\ndeveloper / Web designer',
+      works: ["Corona summer 2019 campaign","Lays sensation campaign", "Lays website" ,"Imagine H2o", "OpenLab", "HNL"]
     }
   },
   methods: {
@@ -233,6 +257,7 @@ export default {
 $black: #1c1b1b;
 $pink: #ffb2a8;
 @import url('https://fonts.googleapis.com/css?family=Montserrat:900');
+
 .hello {
   width: 100%;
   margin: 0;
@@ -286,6 +311,7 @@ $pink: #ffb2a8;
     display: flex;
     flex-direction: column;
 
+
     .jobs {
       font-size: 40px;
       font-weight: initial;
@@ -299,7 +325,7 @@ $pink: #ffb2a8;
       margin: 0;
       transition: opacity 1s ease-out;
       opacity: 0.01;
-      height: 50px;
+      height: 20px;
       overflow: hidden;
       transition: width 1s, margin 0.9s;
     }
@@ -398,6 +424,18 @@ align-items: center;
           width: 100%;
           height: auto;
         }
+      }
+    }
+
+    .work_container {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      justify-content: space-between;
+      .work_item {
+        width: 200px;
+        height: 200px;
+        background: white;
       }
     }
 
@@ -511,7 +549,9 @@ align-items: center;
     display: none!important;
   }
 }
-.icon{
+
+
+.icon {
     font-size: 5em;
     float: left;
     margin: 3px 20px;
@@ -527,5 +567,53 @@ align-items: center;
 
   }
 }
+@media (max-width: 768px) {
+  .hello {
+    .title {
+      font-size: 55px;
+      margin: 75px 20px;
+      .jobs {
+        font-size: 30px;
+      }
+    }
+  }
+}
+@media (max-width: 576px) {
+
+  .hello {
+    .title {
+      font-size: 35px;
+      margin: 75px 35px;
+      .jobs {
+        font-size: 16px;
+        margin-left: 5px;
+      }
+    }
+    .menu_container.collapsed {
+      width: 220px;
+    }
+    .menu_container {
+      ul.menu {
+        width: 40px;
+        padding: 0 10px;
+        li {
+          width: 25px;
+        }
+      }
+      ul.links li a {
+        font-size: 30px;
+      }
+
+    }
+  }
+  .hello .menu_container ul.links.show_links {
+    width: 200px !important;
+    margin-left: 20px !important;
+    -webkit-transition: width .8s, margin-left .8s;
+    transition: width .8s, margin-left .8s;
+}
+}
+
+
 
 </style>
